@@ -9,6 +9,7 @@ object Main {
     var i = 0
     var costoTotal = 0.0
     var imgs = 0
+    var imgsTotal = 0
     var backups = emptyArray<Int>()
     var eau = 0
     var costoExtra = 0.0
@@ -27,31 +28,38 @@ object Main {
     fun main(args: Array<String>) {
         if (args.size < 5) {
             println("java -jar tpFinalSimulacion.jar [TA] [N] [M] [EAS] [TF]")
+            println()
+            println("PLANES")
+            println("25GB\t5 USD")
+            println("50GB\t10 USD")
+            println("80GB\t20 USD")
+            println("160GB\t40 USD")
+            println("320GB\t80 USD")
             return
         }
 
         ta = args[0].toInt()
         n = args[1].toInt()
         m = args[2].toInt()
-        eas = args[3].toInt()
+        eas = args[3].toInt() * 1000
         tf = args[4].toInt()
-        backups = arrayOf(n)
+        backups = Array(n) { 0 }
         costoMensual = obtenerCostoMensual()
 
         while (t < tf)
             ciclar()
 
-        val costoMensual2 = ((costoTotal + costoExtra) / t) * 30
+        val costoDiario = (costoTotal + costoExtra) / t
 
-        println("Plan elegido:\t%dGB %d USD".format(eas / 1000, costoMensual))
-        println("Costo mensual:\t%.2f USD".format(costoMensual2))
-        println("Costo extra:\t%.2f USD".format(costoExtra))
-        println("Costo total:\t%.2f USD".format(costoExtra + costoMensual2))
+        println("Plan elegido:\t\t\t\t%dGB %d USD".format(eas / 1000, costoMensual))
+        println("Costo diario:\t\t\t\t%.2f USD".format(costoDiario))
+        println("Costo extra:\t\t\t\t%.2f USD".format(costoExtra))
+        println("Costo total:\t\t\t\t%.2f USD".format(costoExtra + costoTotal))
         println()
-        println("TA:\t%d".format(ta))
-        println("N:\t%d".format(n))
-        println("M:\t%d".format(m))
-        println("EAS:\t%d".format(eas))
+        println("Duración simulación:\t\t%d días".format(tf))
+        println("Tamaño máximo imágenes:\t\t%dMB".format(ta))
+        println("Duración backups:\t\t\t%d días".format(n))
+        println("Duración limpieza:\t\t\t%d días".format(m))
     }
 
     private fun ciclar() {
@@ -59,8 +67,9 @@ object Main {
 
         val iss = obtenerIss()
         imgs = ta * iss
+        imgsTotal += imgs
 
-        if (i > n) {
+        if (i >= n) {
             i = 0
             borrado = true
         }
@@ -68,8 +77,9 @@ object Main {
         if (borrado)
             eau -= backups[i]
 
-        backups[i] = (imgs * .8).roundToInt()
+        backups[i] = (imgsTotal * .8).roundToInt()
         eau += backups[i] + imgs
+        i++
 
         if (eau > eas) {
             val gbExtras = eau - eas
@@ -83,8 +93,9 @@ object Main {
             if (eas < eau)
                 println("GB excedidos: %dGB".format((eau - eas) / 1000))
             eau = 0
+            imgsTotal = 0
             borrado = false
-            backups = arrayOf(n)
+            backups = Array(n) { 0 }
             i = 0
         }
     }
