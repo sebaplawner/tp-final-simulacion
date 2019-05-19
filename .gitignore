@@ -1,0 +1,12 @@
+TpFinalSimulacion.iml
+.idea/kotlinc.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/artifacts/TpFinalSimulacion_jar.xml
+.idea/libraries/KotlinJavaRuntime.xml
+out/artifacts/TpFinalSimulacion_jar/TpFinalSimulacion.jar
+out/production/TpFinalSimulacion/META-INF/MANIFEST.MF
+out/production/TpFinalSimulacion/META-INF/TpFinalSimulacion.kotlin_module
+out/production/TpFinalSimulacion/tpFinalSimulacion/Main.class
